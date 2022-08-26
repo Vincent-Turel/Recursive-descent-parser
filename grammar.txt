@@ -1,0 +1,61 @@
+
+program ::= block
+
+block ::= { decls stmts }
+
+decls ::= decl decls | ε
+
+decl ::= type ID ;
+
+type ::= BASIC typeClosure
+
+typeClosure ::= [ NUM ] typeClosure | ε
+
+stmts ::= stmt stmts | ε
+
+stmt ::= loc = bool ;
+       | IF ( bool ) stmt
+       | IF ( bool ) stmt ELSE stmt
+       | WHILE ( bool ) stmt
+       | block
+
+loc ::= ID locClosure
+
+locClosure ::= [ bool ] locClosure | ε
+
+bool ::= join boolClosure
+
+boolClosure ::= || join boolClosure | ε
+
+join ::= equality joinClosure
+
+joinClosure ::= && equality joinClosure | ε
+
+equality ::= rel equalityClosure
+
+equalityClosure ::= == rel equalityClosure | != rel equalityClosure | ε
+
+rel ::= expr < expr
+      | expr <= expr
+      | expr >= expr
+      | expr > expr
+      | expr
+
+expr ::= term exprClosure
+
+exprClosure ::= + term exprClosure | - term exprClosure | ε
+
+term ::= unary termClosure
+
+termClosure ::= * unary termClosure | / unary termClosure | ε
+
+unary ::= ! unary
+        | - unary
+        | factor
+
+ factor ::= ( bool )
+          | loc
+          | NUM
+          | REAL
+          | TRUE
+          | FALSE
